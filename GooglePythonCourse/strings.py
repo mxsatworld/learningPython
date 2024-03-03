@@ -38,4 +38,36 @@ text = ("%d little pigs come out, or I'll %s, and I'll %s, and I'll blow your %s
         (3, 'puff', 'huff', 'house')
         )  # LIKE THIS!!!
 # you can also split the string in chunks and python automatically concatenates them
+text = ("%d little pigs come out, or I'll %s, "
+        "and I'll %s, and I'll blow your %s down." %
+        (3, 'puff', 'huff', 'house')
+        )  # LIKE THIS!!!
 print(text)
+
+
+# Regular strings are unicode in python but there is suport for other types like plain bytes
+byte_string = b'A byte string'  # byte strings have a b at the beggining
+print(byte_string)
+# convert regular string to byte string
+regularString = 'A unicode \u018e string \xf1'
+convertedString = regularString.encode('utf-8')  # converts it to utf-8
+# b'A unicode \xc6\x8e string \xc3\xb1'
+print(convertedString)
+convertedString = convertedString.decode('utf-8')
+# A unicode Ǝ string ñ
+print(convertedString)
+
+# if example
+time_hour = 11
+mood = "sleepy"
+if time_hour > 0 and time_hour <= 24:
+    if mood == "sleepy" and time_hour < 12:
+        print("drink coffe")
+    elif mood == "thirsty" and time_hour > 6:
+        print("drink lemonade")
+    else:
+        print("drink water")
+
+if time_hour > 25:
+    # if the code is short you can make it in one line, autopep8 autocorrects this
+    print("broken clock")
