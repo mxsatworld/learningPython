@@ -38,7 +38,7 @@ print_words() and print_top().
 """
 
 import sys
-
+import re
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
@@ -49,20 +49,58 @@ import sys
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
-def main():
-  if len(sys.argv) != 3:
-    print('usage: ./wordcount.py {--count | --topcount} file')
-    sys.exit(1)
 
-  option = sys.argv[1]
-  filename = sys.argv[2]
-  if option == '--count':
-    print_words(filename)
-  elif option == '--topcount':
-    print_top(filename)
-  else:
-    print('unknown option: ' + option)
-    sys.exit(1)
+
+def print_words(filename):
+    # counts how often a word appears in the text
+    # and prints word1 count1
+    # word2 count 2
+    # print the above list sorted by word
+    # store all the words as lowercase so The and the are the same
+    fileRead = open(filename, 'r', encoding='utf-8')
+    letters = []
+    counter = {}
+    for line in fileRead:
+        # module re its for support regexp
+        line = re.sub(r'[^a-z\s]', '', line.lower())
+        # 1arg its the regular express
+        # 2arg replacement of the matching items
+        # 3arg the string that its gona be changed
+        newLine = True
+        line = line.strip()  # strip delete whitespaces at the beggining and the end
+        for letter in line:
+            if letter != " " and newLine == False:
+                letters[-1] = letters[-1] + letter
+            elif newLine:
+                letters.append(letter)
+                newLine = False
+            else:
+                letters.append("")
+    for word in letters:
+        if word in counter:
+            counter[word] += 1
+        else:
+            counter[word] = 1
+    sorted_counter = dict(sorted(counter.items()))
+    for key, value in sorted_counter.items():
+        print(key, value)
+
+
+def main():
+    if len(sys.argv) != 3:
+        print('usage: ./wordcount.py {--count | --topcount} file')
+        sys.exit(1)
+
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print('unknown option: ' + option)
+        sys.exit(1)
+
 
 if __name__ == '__main__':
-  main()
+    main()
