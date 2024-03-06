@@ -86,6 +86,10 @@ def print_words(filename):
         print(key, value)
 
 
+def print_top(filename):
+    return filename
+
+
 def main():
     if len(sys.argv) != 3:
         print('usage: ./wordcount.py {--count | --topcount} file')
