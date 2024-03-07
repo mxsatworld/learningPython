@@ -37,6 +37,7 @@ print_words() and print_top().
 
 """
 
+import itertools
 import sys
 import re
 # +++your code here+++
@@ -52,13 +53,7 @@ import re
 
 
 def print_words(filename):
-    # counts how often a word appears in the text
-    # and prints word1 count1
-    # word2 count 2
-    # print the above list sorted by word
-    # store all the words as lowercase so The and the are the same
     fileRead = open(filename, 'r', encoding='utf-8')
-    letters = []
     counter = {}
     for line in fileRead:
         # module re its for support regexp
@@ -66,28 +61,40 @@ def print_words(filename):
         # 1arg its the regular express
         # 2arg replacement of the matching items
         # 3arg the string that its gona be changed
-        newLine = True
-        line = line.strip()  # strip delete whitespaces at the beggining and the end
-        for letter in line:
-            if letter != " " and newLine == False:
-                letters[-1] = letters[-1] + letter
-            elif newLine:
-                letters.append(letter)
-                newLine = False
+        # sub is for substitution
+        line = line.split()  # strip delete whitespaces at the beggining and the end
+        # but its more eficcient using split, so the line of text is converted in alist
+        for word in line:
+            if word in counter:
+                counter[word] += 1
             else:
-                letters.append("")
-    for word in letters:
-        if word in counter:
-            counter[word] += 1
-        else:
-            counter[word] = 1
+                counter[word] = 1
+    fileRead.close()  # not necesary but is a good practice
     sorted_counter = dict(sorted(counter.items()))
     for key, value in sorted_counter.items():
         print(key, value)
 
 
 def print_top(filename):
-    return filename
+    fileRead = open(filename, 'r', encoding='utf-8')
+    counter = {}
+    for line in fileRead:
+        line = re.sub(r'[^a-z\s]', '', line.lower())
+        line = line.split()  # if i knew about this method i could resolve this in a more easy way
+        # WHY I KNOW THIS KNOW!!!
+        for word in line:
+            if word in counter:
+                counter[word] += 1
+            else:
+                counter[word] = 1
+    fileRead.close()  # not necesary but is a good practice
+    sorted_counter = dict(
+        sorted(counter.items(), key=lambda x: x[1], reverse=True))
+    sorted_counter = dict(itertools.islice(
+        sorted_counter.items(), 20))  # truncate the dict in 20
+    # values
+    for key, value in sorted_counter.items():
+        print(key, value)
 
 
 def main():
