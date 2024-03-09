@@ -16,6 +16,7 @@
 
 import os
 import shutil
+import subprocess
 import sys
 
 
@@ -36,15 +37,18 @@ def main():
     elif sys.argv[1] == "--tozip":
         if len(sys.argv) >= 4:
             zipName = os.path.abspath(sys.argv[2])
-            zipString = "zip -j " + zipName + " "
             files = sys.argv[3:]
-
+            zipString = "zip -j " + zipName + " "
+            for file in files:
+                file = os.path.abspath(file)
+                zipString = zipString + file + " "
+            (status, output) = subprocess.getstatusoutput(zipString)
+            if status:
+                sys.stderr.write(output)
+                sys.exit(status)
+            print(output)
             # zip -j tmp.zip
             # /Users/nparlante/pycourse/day2/xyz__hello__.txt /Users/nparlante/pycourse/day2/zz__something__.jpg
-
-            filenames = sys.argv[3:]
-            for filename in filenames:
-                shutil.copy(filename, path)
         else:
             print("Error: name or file not specified")
     else:
